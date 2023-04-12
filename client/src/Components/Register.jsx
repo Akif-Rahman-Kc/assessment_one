@@ -48,7 +48,6 @@ export default function Register() {
         phoneNo: data.get('phoneNo'),
         otp: data.get('otp'),
     }
-    console.log(data);
     if(data.firstName && data.email && data.password && data.phoneNo){
         let regName =/^[a-zA-Z]+$/;
         let regPhone =/^[0-9]+$/;
@@ -80,8 +79,9 @@ export default function Register() {
                                 setOtpBox(false)
                                 navigate('/login')
                             }else{
-                                otp(false)
-                                otpError('Otp number in incorrect')
+                                console.log(res.data,"===");
+                                setOtp(true)
+                                setOtpError('Otp number in incorrect')
                             }
                         })
                     }
