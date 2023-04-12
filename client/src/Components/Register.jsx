@@ -70,7 +70,12 @@ export default function Register() {
                     setPhoneNoError('')
                     if(!otpBox){
                         axios.post('http://localhost:4000/get_otp', {phoneNo:data.phoneNo}).then((res)=>{
-                            setOtpBox(true)
+                            if (res.data.status === 'success') {
+                                setOtpBox(true)
+                            }else{
+                                setPhoneNo(true)
+                                setPhoneNoError('This phone no is already registered')
+                            }
                         })
                     }else{
                         axios.post('http://localhost:4000/verify_otp', data).then((res)=>{
@@ -79,7 +84,6 @@ export default function Register() {
                                 setOtpBox(false)
                                 navigate('/login')
                             }else{
-                                console.log(res.data,"===");
                                 setOtp(true)
                                 setOtpError('Otp number in incorrect')
                             }

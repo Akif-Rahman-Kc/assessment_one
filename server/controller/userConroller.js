@@ -6,22 +6,27 @@ let SID
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 module.exports = {
-    getOtp: (req, res) =>{
+    getOtp: async (req, res) =>{
         try {
             const { phoneNo } = req.body
-            client.verify.v2.services
-            .create({friendlyName:'my web app'})
-            .then((service) =>{
-                SID=service.sid;
-                client.verify.v2.services(service.sid)
-                .verifications.create({to:'+91'+phoneNo, channel: 'sms'})
-                .then(verification => console.log(verification.status))
-    
+            const phoneExist = await User.findOne({phoneNo: phoneNo });
+            if (phoneExist) {
+                res.json({status:'failed'})
+            } else {
+                client.verify.v2.services
+                .create({friendlyName:'my web app'})
+                .then((service) =>{
+                    SID=service.sid;
+                    client.verify.v2.services(service.sid)
+                    .verifications.create({to:'+91'+phoneNo, channel: 'sms'})
+                    .then(verification => console.log(verification.status))
+        
+                }
+                ).catch((err) =>{
+                    console.log(err)
+                })
+                res.json({status:'success'})
             }
-            ).catch((err) =>{
-                console.log(err)
-            })
-            res.json()
         } catch (error) {
             console.log(error)
         }
@@ -53,12 +58,11 @@ module.exports = {
         try {
             console.log(req.body);
             const {email, password } = req.body
-            const existEmail = await User.findOne({phoneNo: email });
-            console.log(existEmail);
-        if (existEmail) {
-            const pass = await bcrypt.compare(password, existEmail.password);
+            const phoneExist = await User.findOne({phoneNo: email });
+        if (phoneExist) {
+            const pass = await bcrypt.compare(password, phoneExist.password);
             if (pass) {
-                res.json({user:existEmail, status:'success'})
+                res.json({user:phoneExist, status:'success'})
             } else {
                 res.json({status:"failed", password:true})
             }
