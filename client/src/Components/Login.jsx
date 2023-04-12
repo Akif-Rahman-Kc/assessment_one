@@ -47,7 +47,7 @@ export default function LogIn() {
             } else {
                 if (res.data.email) {
                     setEmail(TextTrackCue)
-                    setEmailError('Email is incorrect')
+                    setEmailError('PhoneNo is incorrect')
                 } else {
                     setPassword(true)
                     setPasswordError('Password is incorrect')
@@ -57,7 +57,7 @@ export default function LogIn() {
     }else{
         if (data.email === '') {
             setEmail(true)
-            setEmailError('Please enter email')
+            setEmailError('Please enter phoneNo')
         }
         if (data.password === '') {
             setPassword(true)
@@ -90,9 +90,9 @@ export default function LogIn() {
               required
               fullWidth
               id="email"
-              label="Email Address"
+              label="Phone Number"
               name="email"
-              autoComplete="email"
+              autoComplete="phoneNo"
               error={email}
               helperText={emailError}
               autoFocus
